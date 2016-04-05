@@ -1,10 +1,12 @@
 package com.mpw;
 
+import com.mpw.repetition.DefaultNextRepetitionService;
+import com.mpw.repetition.Repetition;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mpw.Repetition.RepetitionStatus;
+import com.mpw.repetition.Repetition.RepetitionStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;

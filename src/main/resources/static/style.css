@@ -1,0 +1,13 @@
+.error{
+    color: #ff0000;
+}
+
+body{
+    background: #e5e5e5;
+    color: #999;
+}
+
+.container-box{
+    background: #ffffff;
+    padding:15px;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Stomp Receiving Example</title>
+    <link href="/webjars/angular-growl-2/0.7.3/angular-growl.css" rel="stylesheet">
+    <link href="/webjars/bootstrap/3.3.6/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body ng-app="hackathonApp">
+
+    <div class="container container-box">
+
+        <div class="header"></div>
+
+        <div id="messages"></div>
+
+        <div ng-view></div>
+    </div>
+
+    <div growl></div>
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script src="/webjars/angular/1.5.3/angular.js" type="text/javascript"></script>
+    <script src="/webjars/angular-route/1.5.3/angular-route.min.js" type="text/javascript"></script>
+    <script src="/webjars/angular-growl-2/0.7.3/angular-growl.min.js" type="text/javascript"></script>
+    <script src="/app.js" type="text/javascript"></script>
+    <script src="/learning/learning-controller.js" type="text/javascript"></script>
+    <script src="/learning/learning-factory.js" type="text/javascript"></script>
+    <script src="/cards/cards-factory.js" type="text/javascript"></script>
+    <script src="/cards/cards-controller.js" type="text/javascript"></script>
+    <script src="/alexa/alexa-factory.js" type="text/javascript"></script>
+
+</body>
+</html>
