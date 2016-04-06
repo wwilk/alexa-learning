@@ -24,31 +24,66 @@ public class DefaultNextRepetitionServiceTest {
 
     @Before
     public void setUp(){
-        algorithm = new DefaultNextRepetitionService();
+    	
+    	int [] gradesWeights = {5, 4, 3, 2, 1};
+        algorithm = new DefaultNextRepetitionService(gradesWeights);
+    
     }
-
+    
     @Test
-    public void test(){
-        DateTime now = new DateTime();
-        DateTime yesterday = new DateTime().minusDays(1);
-        DateTime todayMidnight = new DateTime().withTimeAtStartOfDay();
-        DateTime tomorrowNoon = yesterday.withHourOfDay(12).withMinuteOfHour(0); // notice immutability
-
-        Repetition falseNowPlanned = new Repetition(now.toDate(), false, RepetitionStatus.PLANNED);
-        Repetition trueYesterdayRepeated = new Repetition(yesterday.toDate(), true, RepetitionStatus.REPEATED);
-        Repetition falseTodayMidnightRepeated = new Repetition(todayMidnight.toDate(), false, RepetitionStatus.REPEATED);
-        Repetition falseTomorrowNoonPlanned = new Repetition(tomorrowNoon.toDate(), null, RepetitionStatus.PLANNED);
-
-        List<Repetition> repetitions = new ArrayList<>();
-        repetitions.add(falseNowPlanned);
-        repetitions.add(trueYesterdayRepeated);
-        repetitions.add(falseTodayMidnightRepeated);
-        repetitions.add(falseTomorrowNoonPlanned);
-
-        Collections.sort(repetitions); // sorts in order based on implementation of Comparable interface
-
-        Date result = algorithm.nextRepetition(repetitions);
-
-        assertThat(result).isNull();
+    public void shouldReturnDatePlusOneDayWhenThereIsOnlyOneGradeEqualToOne(){
+    	
+    	int grade = 1;
+    	int numberOfAddedDays = 1;
+    	
+    	DateTime now = new DateTime();
+    	DateTime expectedDate = now.plusDays(numberOfAddedDays);
+    	
+    	Repetition repetition = new Repetition(now.toDate(), grade);
+    	
+    	List<Repetition> singleRepetitionList = new ArrayList<>();
+		singleRepetitionList.add(repetition);
+		
+		assertThat(algorithm.nextRepetition(singleRepetitionList)).isEqualTo(expectedDate.toDate());
+    }
+    
+    @Test
+    public void shouldReturnDatePlusTwoDaysWhenThereAreOnlyGradesEqualToTwo(){
+    	
+    	int grade = 2;
+    	int numberOfAddedDays = 2;
+    	int repetitionsNumber = 5;
+    	DateTime now = new DateTime();
+		DateTime expectedDate = now.plusDays(numberOfAddedDays);
+    	
+    	List<Repetition> repetitions = new ArrayList<>();
+    	
+    	for (int i = 0; i < repetitionsNumber; ++i){
+    		repetitions.add(new Repetition(now.minusDays(i).toDate(), grade));
+    	}
+    	
+		assertThat(algorithm.nextRepetition(repetitions)).isEqualTo(expectedDate.toDate());
+    }
+    
+    @Test
+    public void shouldReturnDatePlusTwoDaysWhenThereAreFiveGradesEqualToTwoAndTheEarliestDifferent(){
+    	
+    	int grade = 2;
+    	int gradeDifferentFromTwo = 5;
+    	int minusDaysForGradeDifferentFromTwo = 100;
+    	int numberOfAddedDays = 2;
+    	int repetitionsNumber = 5;
+    	
+    	DateTime now = new DateTime();
+		DateTime expectedDate = now.plusDays(numberOfAddedDays);
+    	
+    	List<Repetition> repetitions = new ArrayList<>();
+    	
+    	for (int i = 0; i < repetitionsNumber; ++i){
+    		repetitions.add(new Repetition(now.minusDays(i).toDate(), grade));
+    	}
+    	repetitions.add(new Repetition(now.minusDays(minusDaysForGradeDifferentFromTwo).toDate(), gradeDifferentFromTwo));
+		
+    	assertThat(algorithm.nextRepetition(repetitions)).isEqualTo(expectedDate.toDate());
     }
 }
