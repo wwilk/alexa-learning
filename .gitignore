@@ -8,3 +8,8 @@
 
 #maven
 target/
+
+#eclipse Windows
+.classpath
+.project
+.settings/
