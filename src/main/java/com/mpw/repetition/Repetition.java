@@ -8,10 +8,12 @@ import java.util.Date;
 public class Repetition implements Comparable<Repetition>{
     private Date date;
     private int userGrade;
+    private RepetitionStatus status;
 
     public Repetition(Date date, int userGrade){
         this.date = date;
         this.userGrade = userGrade;
+        this.status = RepetitionStatus.PLANNED;
     }
 
     public Date getDate() {
@@ -24,6 +26,14 @@ public class Repetition implements Comparable<Repetition>{
     
     public int getUserGrade(){
     	return userGrade;
+    }
+    
+    public RepetitionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RepetitionStatus status) {
+        this.status = status;
     }
 
     @Override
