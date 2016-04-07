@@ -5,7 +5,14 @@
 
 (function(){
 
-    var app = angular.module('hackathonApp', ['learningControllerModule', 'cardsControllerModule', 'ngRoute']);
+    var app = angular.module('hackathonApp', ['learningControllerModule', 'cardsControllerModule', 'ngRoute', 'alexaFactoryModule']);
+
+    app.controller('mainController', function($rootScope, alexaFactory){
+        alexaFactory.connectToAlexa();
+        $rootScope.$on('alexaRequestEvent', function(alexaRequestEvent){
+
+        });
+    });
 
     app.config(function($routeProvider, $locationProvider) {
       $routeProvider

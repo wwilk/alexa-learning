@@ -4,40 +4,36 @@
     var app = angular.module('alexaFactoryModule', ['angular-growl'])
         .factory('alexaFactory', function($http, $rootScope, $q, $log, growl) {
 
-        var queueName = "/topic/alexaRequest";
         var socket = new SockJS('/stomp');
         var stompClient = Stomp.over(socket);
+        var currentRequestEvent = null;
 
-        var factory = {
-            notifyUser : function(message){
-                growl.success(message);
+        $rootScope.$on('alexaResponseEvent', function(event, message){
+            if(currentRequestEvent){
+                message.requestId = currentRequestEvent.eventId;
+                sendResponseToAlexa(message);
             }
-        };
-
-        $rootScope.$on('alexaResponseEvent', function(event, requestId, message){
-            sendResponseToAlexa({requestId : requestId, message: message});
         });
 
-        function dispatchResponse(alexaRequestEvent){
-            //sendToAlexa(alexaRequestEvent);
-            //growl.success(alexaRequestEvent);
+        function sendResponseToAlexa(message){
+            currentRequestEvent = null;
+            stompClient.send("/app/alexaResponse", {}, JSON.stringify(message));
+        };
+
+        function dispatchRequest(alexaRequestEvent){
+            currentRequestEvent = alexaRequestEvent;
             $rootScope.$emit('alexaRequestEvent', alexaRequestEvent);
         };
 
-        function connectToAlexa(){
-            stompClient.connect({ }, function(frame) {
-                // subscribe to the /topic/message endpoint
-                stompClient.subscribe(queueName, function(response) {
-                    dispatchResponse(JSON.parse(response.body));
+        var factory = {
+            connectToAlexa: function(){
+                stompClient.connect({ }, function(frame) {
+                    stompClient.subscribe('/topic/alexaRequest', function(response) {
+                        dispatchRequest(JSON.parse(response.body));
+                    });
                 });
-            });
+            }
         };
-
-        function sendResponseToAlexa(message){
-            stompClient.send("/app/alexaResponse", {}, message);
-        };
-
-        connectToAlexa();
 
         return factory;
     });

@@ -1,11 +1,11 @@
 'use strict';
 
 (function(){
-    var app = angular.module('learningControllerModule', ['learningFactoryModule', 'alexaFactoryModule']);
+    var app = angular.module('learningControllerModule', ['learningFactoryModule', 'angular-growl']);
 
-    app.controller('learningController', function($scope, $rootScope, $location, learningFactory, alexaFactory) {
+    app.controller('learningController', function($scope, $rootScope, $location, learningFactory, growl) {
 
-        var _this = this;
+        var self = this;
         this.card = null;
         this.answer = '';
         this.question = '';
@@ -18,12 +18,12 @@
 
         function checkAnswer(){
             var message;
-            if(this.answer === this.card.answer){
+            if(self.answer === self.card.answer){
                 message = "Correct!";
             } else{
                 message = "Wrong!";
             }
-            $rootScope.$emit('alexaResponseEvent', alexaRequestEvent.requestId, 'done, boy');
+            $rootScope.$emit('alexaResponseEvent', {message : message});
         };
 
         this.checkAnswer = checkAnswer;
@@ -33,21 +33,25 @@
                 learningFactory.getPendingCards()
                     .then(function(cards){
                         if(cards.length === 0){
-
+                            growl.error('Nothing more to learn');
                         } else{
                             next();
                         }
                     });
             } else{
-                _this.card = learningFactory.cards.pop();
-                _this.answer = '';
-                _this.question = _this.card.question;
+                self.card = learningFactory.cards.pop();
+                self.answer = '';
+                self.question = self.card.question;
             }
         };
 
         learningFactory.getPendingCards()
             .then(function(cards){
-                next();
+                if(cards.length > 0){
+                    next();
+                } else{
+                    growl.error('Nothing more to learn');
+                }
             });
     });
 
