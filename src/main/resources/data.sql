@@ -1,0 +1,1 @@
+insert into card(id, question, answer) values(1, 'test', 'ąęźżół');

@@ -3,19 +3,27 @@
 (function(){
     var app = angular.module('learningControllerModule', ['learningFactoryModule', 'alexaFactoryModule']);
 
-    app.controller('learningController', function($scope, $location, learningFactory, alexaFactory) {
+    app.controller('learningController', function($scope, $rootScope, $location, learningFactory, alexaFactory) {
 
         var _this = this;
         this.card = null;
         this.answer = '';
         this.question = '';
 
-        function checkAnswer(){
-            if(this.answer === this.card.answer){
-                alexaFactory.notifyUser("Correct!");
-            } else{
-                alexaFactory.notifyUser("Wrong!");
+        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
+            if(alexaRequestEvent.method.name = 'checkAnswer'){
+                checkAnswer();
             }
+        });
+
+        function checkAnswer(){
+            var message;
+            if(this.answer === this.card.answer){
+                message = "Correct!";
+            } else{
+                message = "Wrong!";
+            }
+            $rootScope.$emit('alexaResponseEvent', alexaRequestEvent.requestId, 'done, boy');
         };
 
         this.checkAnswer = checkAnswer;
