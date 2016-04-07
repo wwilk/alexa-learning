@@ -7,13 +7,13 @@ import java.util.Date;
  */
 public class Repetition implements Comparable<Repetition>{
     private Date date;
-    private Boolean correct;
+    private int userGrade;
     private RepetitionStatus status;
 
-    public Repetition(Date date, Boolean correct, RepetitionStatus status){
+    public Repetition(Date date, int userGrade){
         this.date = date;
-        this.correct = correct;
-        this.status = status;
+        this.userGrade = userGrade;
+        this.status = RepetitionStatus.PLANNED;
     }
 
     public Date getDate() {
@@ -23,21 +23,17 @@ public class Repetition implements Comparable<Repetition>{
     public void setDate(Date date) {
         this.date = date;
     }
-
+    
+    public int getUserGrade(){
+    	return userGrade;
+    }
+    
     public RepetitionStatus getStatus() {
         return status;
     }
 
     public void setStatus(RepetitionStatus status) {
         this.status = status;
-    }
-
-    public Boolean isCorrect(){
-        return correct;
-    }
-
-    public void setCorrect(Boolean correct){
-        this.correct = correct;
     }
 
     @Override
