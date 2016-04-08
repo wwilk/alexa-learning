@@ -34,6 +34,6 @@ public class CardController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/pending")
     public List<Card> findPending(){
-        return cardService.findAll();
+        return cardService.findPlannedForToday();
     }
 }

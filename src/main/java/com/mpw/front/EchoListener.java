@@ -39,7 +39,7 @@ public class EchoListener {
         Method method = fromContent(content);
         AlexaRequestEvent event = new AlexaRequestEvent(messageId, method);
         this.template.convertAndSend("/topic/alexaRequest", messageToString(event));
-        DeferredResult result = new DeferredResult(10000l);
+        DeferredResult result = new DeferredResult(100000l);
         result.onTimeout( () -> result.setResult("timeout"));
         results.put(messageId, result);
         return result;

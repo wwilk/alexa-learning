@@ -1,16 +1,28 @@
 package com.mpw.repetition;
 
+import com.mpw.card.Card;
+
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by wilk.wojtek@gmail.com.
  */
+@Entity
 public class Repetition implements Comparable<Repetition>{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private Date date;
-    private int userGrade;
+    private Integer userGrade;
     private RepetitionStatus status;
+    private int cardId;
 
-    public Repetition(Date date, int userGrade){
+    public Repetition(){
+
+    }
+
+    public Repetition(Date date, Integer userGrade){
         this.date = date;
         this.userGrade = userGrade;
         this.status = RepetitionStatus.PLANNED;
@@ -27,13 +39,25 @@ public class Repetition implements Comparable<Repetition>{
     public int getUserGrade(){
     	return userGrade;
     }
-    
+
+    public void setUserGrade(int userGrade){
+        this.userGrade = userGrade;
+    }
+
     public RepetitionStatus getStatus() {
         return status;
     }
 
     public void setStatus(RepetitionStatus status) {
         this.status = status;
+    }
+
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
     }
 
     @Override
