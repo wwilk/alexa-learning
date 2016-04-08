@@ -30,13 +30,12 @@ public class DefaultNextRepetitionServiceTest {
     }
     
     @Test
-    public void shouldReturnDatePlusOneDayWhenThereIsOnlyOneGradeEqualToOne(){
+    public void shouldReturnTodaysDateWhenThereIsOnlyOneGradeEqualToOne(){
     	
     	int grade = 1;
-    	int numberOfAddedDays = 1;
     	
-    	DateTime now = new DateTime();
-    	DateTime expectedDate = now.plusDays(numberOfAddedDays);
+    	DateTime now = new DateTime().withTimeAtStartOfDay();
+    	DateTime expectedDate = now;
     	
     	Repetition repetition = new Repetition(now.toDate(), grade);
     	
@@ -52,7 +51,7 @@ public class DefaultNextRepetitionServiceTest {
     	int grade = 2;
     	int numberOfAddedDays = 2;
     	int repetitionsNumber = 5;
-    	DateTime now = new DateTime();
+    	DateTime now = new DateTime().withTimeAtStartOfDay();
 		DateTime expectedDate = now.plusDays(numberOfAddedDays);
     	
     	List<Repetition> repetitions = new ArrayList<>();
@@ -73,7 +72,7 @@ public class DefaultNextRepetitionServiceTest {
     	int numberOfAddedDays = 2;
     	int repetitionsNumber = 5;
     	
-    	DateTime now = new DateTime();
+    	DateTime now = new DateTime().withTimeAtStartOfDay();
 		DateTime expectedDate = now.plusDays(numberOfAddedDays);
     	
     	List<Repetition> repetitions = new ArrayList<>();
@@ -94,5 +93,22 @@ public class DefaultNextRepetitionServiceTest {
     	List<Repetition> repetitions = new ArrayList<>();
 		
     	assertThat(algorithm.nextRepetition(repetitions)).isEqualTo(todaysMidnight.toDate());
+    }
+    
+    @Test
+    public void shouldReturnTodaysDayWhenLastRepetitionsGradeIsEqualToOne(){
+    	
+    	int grade = 5;
+    	int repetitionsNumber = 5;
+    	DateTime now = new DateTime().withTimeAtStartOfDay();
+		DateTime expectedDate = now;
+    	
+    	List<Repetition> repetitions = new ArrayList<>();
+    	
+    	for (int i = 0; i < repetitionsNumber; ++i){
+    		repetitions.add(new Repetition(now.minusDays(i+5).toDate(), grade));
+    	}
+    	repetitions.add(new Repetition(now.minusDays(1).toDate(), 1));
+		assertThat(algorithm.nextRepetition(repetitions)).isEqualTo(expectedDate.toDate());
     }
 }

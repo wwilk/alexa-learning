@@ -34,8 +34,7 @@ public class DefaultNextRepetitionService implements NextRepetitionService {
     	int addedDays = 0;
     	addedDays = countNumberOfDaysToBeAdded(repetitions);
     	
-    	Date d = repetitions.get(0).getDate();
-    	DateTime dtOrg = new DateTime(d.getTime());
+    	DateTime dtOrg = new DateTime().withTimeAtStartOfDay();
     	DateTime dtPlusOne = dtOrg.plusDays(addedDays);
     	
     	return dtPlusOne.toDate();
@@ -49,6 +48,10 @@ public class DefaultNextRepetitionService implements NextRepetitionService {
     	int numberOfConsideredRepetitions = (numberOfRepetitions > MAX_REPETITIONS_NUMBER) ? MAX_REPETITIONS_NUMBER : numberOfRepetitions;
     	
     	Collections.sort(repetitions, Comparator.reverseOrder());
+    	
+    	if (1 == repetitions.get(0).getUserGrade()){
+    		return 0;
+    	}
     	
     	for (int i = 0; i < numberOfConsideredRepetitions; ++i){
     		nominator += gradesWeights[i] * repetitions.get(i).getUserGrade();
