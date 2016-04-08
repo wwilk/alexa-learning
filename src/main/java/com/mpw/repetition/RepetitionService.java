@@ -27,6 +27,7 @@ public class RepetitionService {
     public void grade(int grade, int cardId){
         Repetition repetition = findCurrent(cardId);
         repetition.setUserGrade(grade);
+        repetition.setStatus(Repetition.RepetitionStatus.REPEATED);
     }
 
     public void scheduleNext(int cardId){

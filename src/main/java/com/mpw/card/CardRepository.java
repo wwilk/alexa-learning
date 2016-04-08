@@ -3,6 +3,8 @@ package com.mpw.card;
 import com.mpw.config.AbstractRepository;
 import com.mpw.repetition.QRepetition;
 import com.mpw.repetition.Repetition.RepetitionStatus;
+import com.mysema.query.jpa.JPASubQuery;
+import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.path.EntityPathBase;
 import org.springframework.stereotype.Repository;
 
@@ -23,10 +25,19 @@ public class CardRepository extends AbstractRepository<Card> {
     }
 
     public List<Card> findPlannedBefore(Date date){
-        return query().join(REPETITION).on(REPETITION.cardId.eq(CARD.id))
-                .where(REPETITION.status.eq(RepetitionStatus.PLANNED))
-                .where(REPETITION.date.before(date))
+        return query()
+//                .join(REPETITION).on(REPETITION.cardId.eq(CARD.id))
+//                .where(REPETITION.status.eq(RepetitionStatus.PLANNED))
+//                .where(REPETITION.date.before(date))
+                .where(repetitionSubquery(date, REPETITION.cardId.eq(CARD.id)))
                 .list(CARD);
+    }
+
+    private BooleanExpression repetitionSubquery(Date date, BooleanExpression joinExpression){
+        return new JPASubQuery().from(REPETITION)
+                .where(joinExpression)
+                .where(REPETITION.status.eq(RepetitionStatus.PLANNED))
+                .where(REPETITION.date.before(date)).exists();
     }
 
     @Override

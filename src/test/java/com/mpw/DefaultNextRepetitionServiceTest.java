@@ -24,7 +24,6 @@ public class DefaultNextRepetitionServiceTest {
 
     @Before
     public void setUp(){
-    	
     	int [] gradesWeights = {5, 4, 3, 2, 1};
         algorithm = new DefaultNextRepetitionService(gradesWeights);
     

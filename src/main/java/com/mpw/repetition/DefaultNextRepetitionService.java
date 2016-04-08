@@ -6,21 +6,31 @@ import java.util.List;
 import java.util.Collections;
 
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by wilk.wojtek@gmail.com.
  */
+@Service
 public class DefaultNextRepetitionService implements NextRepetitionService {
 	
 	private int [] gradesWeights;
 	private static final int MAX_REPETITIONS_NUMBER = 5;
-	
+
+	public DefaultNextRepetitionService(){
+		this.gradesWeights = new int[]{5, 4, 3, 2, 1};
+	}
+
 	public DefaultNextRepetitionService(int [] gradesWeights) {
 		this.gradesWeights = gradesWeights;
 	}
     @Override
     public Date nextRepetition(List<Repetition> repetitions) {
-    	
+		if (0 == repetitions.size()){
+			DateTime now = new DateTime().withTimeAtStartOfDay();
+			return now.toDate();
+		}
+
     	int addedDays = 0;
     	addedDays = countNumberOfDaysToBeAdded(repetitions);
     	

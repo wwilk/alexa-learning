@@ -13,6 +13,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -28,6 +30,8 @@ public class RepetitionServiceIT{
     private RepetitionService repetitionService;
     @Autowired
     private CardService cardService;
+    @PersistenceContext
+    private EntityManager em;
 
     @Test
     public void test(){
@@ -37,12 +41,24 @@ public class RepetitionServiceIT{
 
         cardService.save(card);
 
+        assertThat(card.getId()).isNotEqualTo(0);
+
         List<Card> planned = cardService.findPlannedForToday();
 
         assertThat(planned).hasSize(1);
         assertThat(planned.get(0).getId()).isEqualTo(card.getId());
 
-        Repetition repetition = repetitionService.findCurrent(card.getId());
+        assertThat(repetitionService.findCurrent(card.getId())).isNotNull();
+
+        repetitionService.grade(1, card.getId());
+
+        assertThat(cardService.findPlannedForToday()).isEmpty();
+
+        repetitionService.scheduleNext(card.getId());
+
+        planned = cardService.findPlannedForToday();
+
+        assertThat(planned).hasSize(1);
 
     }
 }
