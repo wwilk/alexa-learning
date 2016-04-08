@@ -86,4 +86,14 @@ public class DefaultNextRepetitionServiceTest {
 		
     	assertThat(algorithm.nextRepetition(repetitions)).isEqualTo(expectedDate.toDate());
     }
+    
+    @Test
+    public void shouldReturnTodaysDateWithTimeAtStartOfDayWhenRepetitionsListIsEmpty(){
+    	
+    	DateTime todaysMidnight = new DateTime().withTimeAtStartOfDay();
+    	
+    	List<Repetition> repetitions = new ArrayList<>();
+		
+    	assertThat(algorithm.nextRepetition(repetitions)).isEqualTo(todaysMidnight.toDate());
+    }
 }

@@ -21,6 +21,11 @@ public class DefaultNextRepetitionService implements NextRepetitionService {
     @Override
     public Date nextRepetition(List<Repetition> repetitions) {
     	
+    	if (0 == repetitions.size()){
+    		DateTime now = new DateTime().withTimeAtStartOfDay();
+    		return now.toDate();
+    	}
+    	
     	int addedDays = 0;
     	addedDays = countNumberOfDaysToBeAdded(repetitions);
     	
