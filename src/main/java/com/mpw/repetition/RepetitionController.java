@@ -1,10 +1,11 @@
 package com.mpw.repetition;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +26,12 @@ public class RepetitionController {
     public void scheduleNext(@RequestBody GradeTO grade){
         repetitionService.grade(grade.grade, grade.cardId);
         repetitionService.scheduleNext(grade.cardId);
+    }
+
+    @RequestMapping( value = "/planned/{date}")
+    public long getPlanned(@PathVariable String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return repetitionService.countPlanned(sdf.parse(date));
     }
 
     @RequestMapping

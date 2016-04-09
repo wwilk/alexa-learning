@@ -46,6 +46,10 @@ public class RepetitionService {
         return repetitionRepository.findAll();
     }
 
+    public long countPlanned(Date date){
+        return repetitionRepository.countForDate(date);
+    }
+
     private Repetition nextRepetition(int cardId, Date nextDate){
         Repetition nextRepetition = new Repetition();
         nextRepetition.setDate(nextDate);

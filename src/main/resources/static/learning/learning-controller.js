@@ -17,6 +17,8 @@
             } else if(method.name === 'AssessmentIntent'){
                 var grade = convertGrade(method.parameters.grade);
                 gradeAnswer(grade);
+            } else if(method.name === 'HowManyWordsIntent'){
+                countPlanned(method.parameters.date);
             }
         });
 
@@ -34,6 +36,14 @@
             self.question = '';
             $rootScope.$emit('alexaResponseEvent', 'Answer graded with ' + grade);
         };
+
+        function countPlanned(date){
+            learningFactory.countPlanned(date).then(function(count){
+                var message = "You have " + count + " words planned for " + learningFactory.formatDate(date);
+                $rootScope.$emit('alexaResponseEvent', message);
+            })
+
+        }
 
         function convertGrade(alexaGrade){
             if(alexaGrade === 'good'){

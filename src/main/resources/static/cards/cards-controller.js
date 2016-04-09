@@ -29,6 +29,8 @@
             cardsFactory.save({question: self.question, answer : self.answer})
                 .then(function(){
                     $rootScope.$emit('alexaResponseEvent', 'Card saved');
+                    self.answer = '';
+                    self.question = '';
                 });
         };
 
