@@ -7,10 +7,23 @@
 
     var app = angular.module('hackathonApp', ['learningControllerModule', 'cardsControllerModule', 'ngRoute', 'alexaFactoryModule']);
 
-    app.controller('mainController', function($rootScope, alexaFactory){
+    app.controller('mainController', function($rootScope, $location, alexaFactory){
         alexaFactory.connectToAlexa();
-        $rootScope.$on('alexaRequestEvent', function(alexaRequestEvent){
+        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
+            var method = alexaRequestEvent.method;
 
+            var destination = null;
+            if(method.name === 'GoToLearningIntent'){
+                destination = "learning"
+            } else if(method.name === 'GoToCardsIntent'){
+                destination = "cards";
+            }
+
+            if(destination){
+                window.location.hash = "/" + destination;
+                var message = "Switched to " + destination + " mode";
+                $rootScope.$emit('alexaResponseEvent', message);
+            }
         });
     });
 

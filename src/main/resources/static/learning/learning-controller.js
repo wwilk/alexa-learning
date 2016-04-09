@@ -30,6 +30,8 @@
             learningFactory.gradeAnswer(grade, self.card.id).then(function(){
                 next();
             });
+            self.answer = '';
+            self.question = '';
             $rootScope.$emit('alexaResponseEvent', 'Answer graded with ' + grade);
         };
 
