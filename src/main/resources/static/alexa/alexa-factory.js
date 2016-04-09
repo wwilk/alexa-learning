@@ -8,6 +8,7 @@
         var stompClient = Stomp.over(socket);
         var currentRequestEvent = null;
 
+
         $rootScope.$on('alexaResponseEvent', function(event, message){
             if(currentRequestEvent){
                 var responseEvent = {

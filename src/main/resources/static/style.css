@@ -2,9 +2,35 @@
     color: #ff0000;
 }
 
+h3{
+    font-size:36px;
+}
+
+form{
+    margin-top:60px;
+}
+
+.form-group{
+    margin:60px;
+}
+
+input{
+    margin-left:30px;
+}
+
+label{
+    width:300px !important;
+}
+
+btn btn-success
+
+.form-horizontal .form-group{
+    margin-left:200px;
+}
 body{
     background: #e5e5e5;
     color: #999;
+    font-size:30px;
 }
 
 .container-box{
