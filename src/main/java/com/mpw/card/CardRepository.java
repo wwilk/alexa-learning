@@ -20,15 +20,8 @@ public class CardRepository extends AbstractRepository<Card> {
     private static final QCard CARD = QCard.card;
     private static final QRepetition REPETITION = QRepetition.repetition;
 
-    public List<Card> findAll(){
-        return query().list(CARD);
-    }
-
     public List<Card> findPlannedBefore(Date date){
         return query()
-//                .join(REPETITION).on(REPETITION.cardId.eq(CARD.id))
-//                .where(REPETITION.status.eq(RepetitionStatus.PLANNED))
-//                .where(REPETITION.date.before(date))
                 .where(repetitionSubquery(date, REPETITION.cardId.eq(CARD.id)))
                 .list(CARD);
     }

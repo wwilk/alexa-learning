@@ -11,8 +11,11 @@
         this.question = '';
 
         $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
-            if(alexaRequestEvent.method.name = 'checkAnswer'){
+            var method = alexaRequestEvent.method;
+            if(method.name === 'CheckAnswer'){
                 checkAnswer();
+            } else if(method.name === 'Assessment'){
+                gradeAnswer(method.parameters['grade']);
             }
         });
 
@@ -24,6 +27,13 @@
                 message = "Wrong!";
             }
             $rootScope.$emit('alexaResponseEvent', {message : message});
+        };
+
+        function gradeAnswer(grade){
+            learningFactory.gradeAnswer(grade, self.card.id).then(function(){
+                next();
+            });
+            $rootScope.$emit('alexaResponseEvent', {message : 'Answer graded with ' + grade});
         };
 
         this.checkAnswer = checkAnswer;

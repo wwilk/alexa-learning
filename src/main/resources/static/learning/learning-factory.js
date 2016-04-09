@@ -14,6 +14,17 @@
                    })
                    .error(onError(deferred));
                 return deferred.promise;
+            },
+            gradeAnswer: function(grade, cardId){
+                var deferred = $q.defer();
+                $http.post('api/repetition/next/', {
+                        cardId : cardId, grade: grade
+                    })
+                   .success(function(data) {
+                      deferred.resolve(data);
+                   })
+                   .error(onError(deferred));
+                return deferred.promise;
             }
         };
 

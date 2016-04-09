@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.Collections;
@@ -37,6 +35,17 @@ public class EchoListener {
         UUID messageId = UUID.randomUUID();
 
         Method method = fromContent(content);
+        AlexaRequestEvent event = new AlexaRequestEvent(messageId, method);
+        this.template.convertAndSend("/topic/alexaRequest", messageToString(event));
+        DeferredResult result = new DeferredResult(100000l);
+        result.onTimeout( () -> result.setResult("timeout"));
+        results.put(messageId, result);
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public DeferredResult<String> onEchoCall(@RequestBody Method method){
+        UUID messageId = UUID.randomUUID();
         AlexaRequestEvent event = new AlexaRequestEvent(messageId, method);
         this.template.convertAndSend("/topic/alexaRequest", messageToString(event));
         DeferredResult result = new DeferredResult(100000l);

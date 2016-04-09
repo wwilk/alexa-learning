@@ -16,6 +16,7 @@
         });
 
         function sendResponseToAlexa(message){
+            growl.success(message.message);
             currentRequestEvent = null;
             stompClient.send("/app/alexaResponse", {}, JSON.stringify(message));
         };

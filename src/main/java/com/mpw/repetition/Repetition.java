@@ -15,6 +15,7 @@ public class Repetition implements Comparable<Repetition>{
     private int id;
     private Date date;
     private Integer userGrade;
+    @Enumerated(EnumType.STRING)
     private RepetitionStatus status;
     private int cardId;
 
@@ -36,11 +37,11 @@ public class Repetition implements Comparable<Repetition>{
         this.date = date;
     }
     
-    public int getUserGrade(){
+    public Integer getUserGrade(){
     	return userGrade;
     }
 
-    public void setUserGrade(int userGrade){
+    public void setUserGrade(Integer userGrade){
         this.userGrade = userGrade;
     }
 

@@ -42,6 +42,10 @@ public class RepetitionService {
         return repetitionRepository.findCurrent(cardId);
     }
 
+    public List<Repetition> findAll(){
+        return repetitionRepository.findAll();
+    }
+
     private Repetition nextRepetition(int cardId, Date nextDate){
         Repetition nextRepetition = new Repetition();
         nextRepetition.setDate(nextDate);
