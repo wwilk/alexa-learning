@@ -32,7 +32,7 @@
                 });
         };
 
-        this.save = save;
+        this.save = saveAnswer;
     });
 
 })();

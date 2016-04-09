@@ -7,6 +7,10 @@
 
     var app = angular.module('hackathonApp', ['learningControllerModule', 'cardsControllerModule', 'ngRoute', 'alexaFactoryModule']);
 
+    app.config(['growlProvider', function(growlProvider) {
+        growlProvider.globalTimeToLive(5000);
+    }]);
+
     app.controller('mainController', function($rootScope, $location, alexaFactory){
         alexaFactory.connectToAlexa();
         $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
