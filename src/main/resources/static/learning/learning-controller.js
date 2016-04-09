@@ -7,33 +7,41 @@
 
         var self = this;
         this.card = null;
-        this.answer = '';
         this.question = '';
+        this.answer = '';
 
         $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
             var method = alexaRequestEvent.method;
-            if(method.name === 'CheckAnswer'){
+            if(method.name === 'CheckAnswerIntent'){
                 checkAnswer();
-            } else if(method.name === 'Assessment'){
-                gradeAnswer(method.parameters['grade']);
+            } else if(method.name === 'AssessmentIntent'){
+                var grade = convertGrade(method.parameters.grade);
+                gradeAnswer(grade);
             }
         });
 
         function checkAnswer(){
-            var message;
-            if(self.answer === self.card.answer){
-                message = "Correct!";
-            } else{
-                message = "Wrong!";
-            }
-            $rootScope.$emit('alexaResponseEvent', {message : message});
+            self.answer = self.card.answer;
+            var message = "The answer is " + self.card.answer;
+            $rootScope.$emit('alexaResponseEvent', message);
         };
 
         function gradeAnswer(grade){
             learningFactory.gradeAnswer(grade, self.card.id).then(function(){
                 next();
             });
-            $rootScope.$emit('alexaResponseEvent', {message : 'Answer graded with ' + grade});
+            $rootScope.$emit('alexaResponseEvent', 'Answer graded with ' + grade);
+        };
+
+        function convertGrade(alexaGrade){
+            if(alexaGrade === 'good'){
+                return 3;
+            } else if(alexaGrade === 'excellent'){
+                return 5;
+            } else if(alexaGrade === 'bad'){
+                return 1;
+            }
+            return -1;
         };
 
         this.checkAnswer = checkAnswer;

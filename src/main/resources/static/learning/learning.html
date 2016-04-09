@@ -12,10 +12,7 @@
         <label class="col-sm-2 control-label">Answer:</label>
 
         <div class="col-sm-2">
-            <input type="text"
-                   ng-model="learningCtrl.answer"
-                   name="answer"
-                   required="">
+            {{learningCtrl.answer}}
         </div>
 
         <div class="col-sm-8" ng-show="form.$submitted || form.answer.$touched">

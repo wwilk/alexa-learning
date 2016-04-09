@@ -10,20 +10,20 @@ import java.util.UUID;
  */
 public class AlexaResponseEvent {
     private final UUID requestId;
-    private final String message;
+    private final String payload;
 
     @JsonCreator
     public AlexaResponseEvent(@JsonProperty("requestId") UUID requestId,
-                              @JsonProperty("message") String message) {
+                              @JsonProperty("payload") String payload) {
         this.requestId = requestId;
-        this.message = message;
+        this.payload = payload;
     }
 
     public UUID getRequestId() {
         return requestId;
     }
 
-    public String getMessage() {
-        return message;
+    public String getPayload() {
+        return payload;
     }
 }

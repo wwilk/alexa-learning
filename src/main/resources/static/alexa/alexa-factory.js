@@ -10,15 +10,18 @@
 
         $rootScope.$on('alexaResponseEvent', function(event, message){
             if(currentRequestEvent){
-                message.requestId = currentRequestEvent.eventId;
-                sendResponseToAlexa(message);
+                var responseEvent = {
+                    payload: message,
+                    requestId: currentRequestEvent.eventId
+                }
+                sendResponseToAlexa(responseEvent);
             }
         });
 
-        function sendResponseToAlexa(message){
-            growl.success(message.message);
+        function sendResponseToAlexa(responseEvent){
+            growl.success(responseEvent.payload);
             currentRequestEvent = null;
-            stompClient.send("/app/alexaResponse", {}, JSON.stringify(message));
+            stompClient.send("/app/alexaResponse", {}, JSON.stringify(responseEvent));
         };
 
         function dispatchRequest(alexaRequestEvent){

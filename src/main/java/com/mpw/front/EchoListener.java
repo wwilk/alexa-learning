@@ -57,7 +57,7 @@ public class EchoListener {
     @MessageMapping("/alexaResponse")
     public void sendResponseToAlexa(AlexaResponseEvent message){
         DeferredResult<String> result = results.get(message.getRequestId());
-        result.setResult(message.getMessage());
+        result.setResult(message.getPayload());
     }
 
     private String messageToString(AlexaRequestEvent event){
