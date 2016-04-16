@@ -1,7 +1,7 @@
 'use strict';
 
 // main module of application
-// navigation is handled here and all dependencies of the screen are injected
+// navigation and default configurations are handled here
 
 (function(){
 
@@ -25,8 +25,8 @@
 
             if(destination){
                 window.location.hash = "/" + destination;
-                var message = "Switched to " + destination + " mode";
-                $rootScope.$emit('alexaResponseEvent', message);
+                var response = "Switched to " + destination + " mode";
+                alexaFactory.sendResponse(response);
             }
         });
     });
@@ -34,13 +34,8 @@
     app.config(function($routeProvider, $locationProvider) {
       $routeProvider
        .when('/', {
-        redirectTo: '/menu'
+        redirectTo: '/learning'
       })
-      .when('/menu',{
-          templateUrl: 'menu/menu.html',
-          controller: 'menuController',
-          controllerAs : 'menuCtrl'
-        })
       .when('/learning',{
         templateUrl: 'learning/learning.html',
         controller: 'learningController',
@@ -51,9 +46,6 @@
         controller: 'cardsController',
         controllerAs: 'cardsCtrl'
       })
-      .when('/failure', {
-        templateUrl: 'failure.html'
-      });
     });
 
 })();

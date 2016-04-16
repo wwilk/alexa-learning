@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -19,45 +20,57 @@ import java.util.concurrent.ConcurrentMap;
 
 @RestController
 @RequestMapping("/api/echo")
-public class EchoListener {
-    private static final Logger log = LoggerFactory.getLogger(EchoListener.class);
+public class EchoEntryPoint {
+    private static final Logger log = LoggerFactory.getLogger(EchoEntryPoint.class);
     private final SimpMessagingTemplate template;
     private final ObjectMapper mapper = new ObjectMapper();
     private final ConcurrentMap<UUID, DeferredResult<String>> results = new ConcurrentHashMap<>();
 
+    private final long deferredResultTimeout;
+
     @Autowired
-    public EchoListener(SimpMessagingTemplate template){
+    public EchoEntryPoint(SimpMessagingTemplate template, @Value("${deferred-result.timeout}") long deferredResultTimeout){
         this.template = template;
+        this.deferredResultTimeout = deferredResultTimeout;
     }
 
-    @RequestMapping("/{content}")
-    public DeferredResult<String> onEchoCall(@PathVariable String content) {
-        UUID messageId = UUID.randomUUID();
-
-        Method method = fromContent(content);
-        AlexaRequestEvent event = new AlexaRequestEvent(messageId, method);
-        this.template.convertAndSend("/topic/alexaRequest", messageToString(event));
-        DeferredResult result = new DeferredResult(100000l);
-        result.onTimeout( () -> result.setResult("timeout"));
-        results.put(messageId, result);
-        return result;
-    }
-
+    /**
+     * request from aws lambda proxy
+     */
     @RequestMapping(method = RequestMethod.POST)
     public DeferredResult<String> onEchoCall(@RequestBody Method method){
         UUID messageId = UUID.randomUUID();
-        AlexaRequestEvent event = new AlexaRequestEvent(messageId, method);
-        this.template.convertAndSend("/topic/alexaRequest", messageToString(event));
-        DeferredResult result = new DeferredResult(100000l);
-        result.onTimeout( () -> result.setResult("timeout"));
-        results.put(messageId, result);
-        return result;
+
+        sendRequestToFrontEnd(messageId, method);
+
+        return deferResult(messageId);
     }
 
+    /**
+     * response from the front-end
+     */
     @MessageMapping("/alexaResponse")
     public void sendResponseToAlexa(AlexaResponseEvent message){
         DeferredResult<String> result = results.get(message.getRequestId());
         result.setResult(message.getPayload());
+    }
+
+    /**
+     * send request to front-end via web socket
+     */
+    private void sendRequestToFrontEnd(UUID messageId, Method method){
+        AlexaRequestEvent event = new AlexaRequestEvent(messageId, method);
+        this.template.convertAndSend("/topic/alexaRequest", messageToString(event));
+    }
+
+    /**
+      * wait with the response to alexa, until there is a response from our front-end or timeout occurs
+      */
+    private DeferredResult<String> deferResult(UUID messageId){
+        DeferredResult<String> result = new DeferredResult(deferredResultTimeout);
+        result.onTimeout( () -> result.setResult("Timeout occurred. Maybe you should increase it?"));
+        results.put(messageId, result);
+        return result;
     }
 
     private String messageToString(AlexaRequestEvent event){
@@ -66,18 +79,6 @@ public class EchoListener {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Method fromContent(String content){
-        if(!content.contains("-")){
-            return new Method(content, Collections.emptyMap());
-        }
-        String[] contentParts = content.split("-");
-        Map<String, String> parameters = new HashMap<>();
-        for(int i=1;i<contentParts.length-1;i++){
-            parameters.put(contentParts[i], contentParts[i+1]);
-        }
-        return new Method(contentParts[0], parameters);
     }
 
 }

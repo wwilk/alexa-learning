@@ -30,14 +30,9 @@ public class RepetitionRepository extends AbstractRepository<Repetition> {
                 .where(REPETITION.date.between(from, after)).count();
     }
 
-    public Repetition findCurrent(int cardId){
+    public Repetition findNextPlanned(int cardId){
         return query().where(REPETITION.cardId.eq(cardId))
                 .where(REPETITION.status.eq(RepetitionStatus.PLANNED))
-                .singleResult(REPETITION);
-    }
-
-    public Repetition findById(int repetitionId){
-        return query().where(REPETITION.id.eq(repetitionId))
                 .singleResult(REPETITION);
     }
 

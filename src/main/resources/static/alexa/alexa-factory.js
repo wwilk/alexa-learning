@@ -2,32 +2,24 @@
 
 (function(){
     var app = angular.module('alexaFactoryModule', ['angular-growl'])
-        .factory('alexaFactory', function($http, $rootScope, $q, $log, growl) {
+        .factory('alexaFactory', function($rootScope, growl) {
 
         var socket = new SockJS('/stomp');
         var stompClient = Stomp.over(socket);
-        var currentRequestEvent = null;
 
-
-        $rootScope.$on('alexaResponseEvent', function(event, message){
-            if(currentRequestEvent){
-                var responseEvent = {
-                    payload: message,
-                    requestId: currentRequestEvent.eventId
-                }
-                sendResponseToAlexa(responseEvent);
-            }
-        });
-
-        function sendResponseToAlexa(responseEvent){
+        function sendResponseEvent(responseEvent){
             growl.success(responseEvent.payload);
-            currentRequestEvent = null;
             stompClient.send("/app/alexaResponse", {}, JSON.stringify(responseEvent));
         };
 
         function dispatchRequest(alexaRequestEvent){
-            currentRequestEvent = alexaRequestEvent;
-            $rootScope.$emit('alexaRequestEvent', alexaRequestEvent);
+            $rootScope.$emit('alexaRequestEvent', alexaRequestEvent, responseCallback(alexaRequestEvent));
+        };
+
+        function responseCallback(alexaRequestEvent){
+            return function(response){
+                factory.sendResponse(alexaRequestEvent, response);
+            };
         };
 
         var factory = {
@@ -37,6 +29,13 @@
                         dispatchRequest(JSON.parse(response.body));
                     });
                 });
+            },
+            sendResponse: function(alexaRequestEvent, response){
+                var responseEvent = {
+                    payload: response,
+                    requestId: alexaRequestEvent.eventId
+                }
+                sendResponseEvent(responseEvent);
             }
         };
 

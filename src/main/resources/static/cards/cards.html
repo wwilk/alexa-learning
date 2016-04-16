@@ -7,13 +7,9 @@
         <div class="col-sm-2">
             <input type="text"
                    ng-model="cardsCtrl.question"
-                   name="question"
-                   required="">
+                   name="question">
         </div>
 
-        <!--<div class="col-sm-8" ng-show="form.$submitted || form.question.$touched">-->
-            <!--<div class="error" ng-show="form.question.$error.required">You have to provide a question.</div>-->
-        <!--</div>-->
     </div>
 
     <div class="form-group">
@@ -22,17 +18,8 @@
         <div class="col-sm-2">
             <input type="text"
                    ng-model="cardsCtrl.answer"
-                   name="answer"
-                   required="">
+                   name="answer">
         </div>
 
-        <!--<div class="col-sm-8" ng-show="form.$submitted || form.answer.$touched">-->
-            <!--<div class="error" ng-show="form.answer.$error.required">You have to provide an answer.</div>-->
-        <!--</div>-->
     </div>
 </form>
-
-<hr>
-<button class="btn btn-success" ng-click="cardsCtrl.save()" ng-disabled="form.answer.$invalid">
-    <span class="glyphicon glyphicon-save"></span> Save
-</button>

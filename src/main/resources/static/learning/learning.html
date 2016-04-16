@@ -10,14 +10,5 @@
         <label class="col-sm-2 control-label">Answer:</label>
 
         <label class="col-sm-2 control-label">{{learningCtrl.answer}}</label>
-
-        <div class="col-sm-8" ng-show="form.$submitted || form.answer.$touched">
-            <div class="error" ng-show="form.answer.$error.required">You have to provide answer.</div>
-        </div>
     </div>
 </form>
-
-<hr>
-<button class="btn btn-success" ng-click="learningCtrl.checkAnswer()" ng-disabled="form.answer.$invalid">
-    <span class="glyphicon glyphicon-save"></span> Check answer
-</button>

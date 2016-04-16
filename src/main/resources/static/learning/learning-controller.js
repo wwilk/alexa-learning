@@ -3,71 +3,66 @@
 (function(){
     var app = angular.module('learningControllerModule', ['learningFactoryModule', 'angular-growl']);
 
-    app.controller('learningController', function($scope, $rootScope, $location, learningFactory, growl) {
+    app.controller('learningController', function($rootScope, $location, learningFactory, alexaFactory, growl) {
 
         var self = this;
-        this.card = null;
-        this.question = '';
-        this.answer = '';
 
-        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
+        self.card = null;
+        self.question = '';
+        self.answer = '';
+
+        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent, responseCallback){
             var method = alexaRequestEvent.method;
             if(method.name === 'CheckAnswerIntent'){
-                checkAnswer();
+                checkAnswer(responseCallback);
             } else if(method.name === 'AssessmentIntent'){
-                var grade = convertGrade(method.parameters.grade);
-                gradeAnswer(grade);
+                var grade = learningFactory.convertGrade(method.parameters.grade);
+                gradeAnswer(grade, responseCallback);
             } else if(method.name === 'HowManyWordsIntent'){
-                countPlanned(method.parameters.date);
+                countPlanned(method.parameters.date, responseCallback);
             }
         });
 
-        function checkAnswer(){
+        function checkAnswer(responseCallback){
             self.answer = self.card.answer;
-            var message = "The answer is " + self.card.answer;
-            $rootScope.$emit('alexaResponseEvent', message);
+            var response = 'The answer is ' + self.answer;
+            responseCallback(response);
         };
 
-        function gradeAnswer(grade){
-            learningFactory.gradeAnswer(grade, self.card.id).then(function(){
-                next();
-            });
-            self.answer = '';
-            self.question = '';
-            $rootScope.$emit('alexaResponseEvent', 'Answer graded with ' + grade);
-        };
-
-        function countPlanned(date){
-            learningFactory.countPlanned(date).then(function(count){
-                var message = "You have " + count + " words planned for " + learningFactory.formatDate(date);
-                $rootScope.$emit('alexaResponseEvent', message);
-            })
-
-        }
-
-        function convertGrade(alexaGrade){
-            if(alexaGrade === 'good'){
-                return 3;
-            } else if(alexaGrade === 'excellent'){
-                return 5;
-            } else if(alexaGrade === 'bad'){
-                return 1;
+        function gradeAnswer(grade, responseCallback){
+            var response;
+            if(grade === -1){
+                response = 'Incorrect grade. The valid ones are excellent, good and bad';
+            } else{
+                var cardId = self.card.id;
+                self.card = null;
+                self.answer = '';
+                self.question = '';
+                learningFactory.gradeAnswer(grade, cardId).then(function(){
+                    next();
+                });
+                response = 'Answer graded with ' + grade;
             }
-            return -1;
+
+            responseCallback(response);
         };
 
-        this.checkAnswer = checkAnswer;
+        function countPlanned(date, responseCallback){
+            learningFactory.countPlanned(date).then(function(count){
+                var response = "You have " + count + " words planned for " + learningFactory.formatDate(date);
+                responseCallback(response);
+            });
+        };
 
         function next(){
             if(learningFactory.cards.length === 0){
-                learningFactory.getPendingCards()
-                    .then(function(cards){
-                        if(cards.length === 0){
-                            growl.error('Nothing more to learn');
-                        } else{
-                            next();
-                        }
-                    });
+                learningFactory.getPendingCards().then(function(cards){
+                    if(cards.length === 0){
+                        growl.error('Nothing more to learn');
+                    } else{
+                        next();
+                    }
+                });
             } else{
                 self.card = learningFactory.cards.pop();
                 self.answer = '';
@@ -75,14 +70,9 @@
             }
         };
 
-        learningFactory.getPendingCards()
-            .then(function(cards){
-                if(cards.length > 0){
-                    next();
-                } else{
-                    growl.error('Nothing more to learn');
-                }
-            });
+        next();
+
+        this.checkAnswer = checkAnswer;
     });
 
 })();

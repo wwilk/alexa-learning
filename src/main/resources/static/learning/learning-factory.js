@@ -86,6 +86,16 @@
                    .error(onError(deferred));
                 return deferred.promise;
             },
+            convertGrade: function(alexaGrade){
+                if(alexaGrade === 'good'){
+                    return 3;
+                } else if(alexaGrade === 'excellent'){
+                    return 5;
+                } else if(alexaGrade === 'bad'){
+                    return 1;
+                }
+                return -1;
+            },
             formatDate: function(date) {
                 var parts = date.split("-");
                 var year = parts[0];

@@ -6,8 +6,8 @@
     app.controller('cardsController', function($scope, $rootScope, cardsFactory, alexaFactory) {
 
         var self = this;
-        this.answer = '';
-        this.question = '';
+        self.answer = '';
+        self.question = '';
 
         $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
             var method = alexaRequestEvent.method;
@@ -21,20 +21,20 @@
         function fillForm(question, answer){
             self.question = question;
             self.answer = answer;
-            var message = "Please correct the inputs and say 'correct' when you are done";
-            $rootScope.$emit('alexaResponseEvent', message);
+            var response = "Please correct the inputs and say 'correct' when you are done";
+            alexaFactory.sendResponse(response);
         };
 
         function saveAnswer(){
             cardsFactory.save({question: self.question, answer : self.answer})
                 .then(function(){
-                    $rootScope.$emit('alexaResponseEvent', 'Card saved');
+                    alexaFactory.sendResponse('Card saved');
                     self.answer = '';
                     self.question = '';
                 });
         };
 
-        this.save = saveAnswer;
+        self.save = saveAnswer;
     });
 
 })();

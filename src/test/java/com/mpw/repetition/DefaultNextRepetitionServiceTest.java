@@ -1,4 +1,4 @@
-package com.mpw;
+package com.mpw.repetition;
 
 import com.mpw.repetition.DefaultNextRepetitionService;
 import com.mpw.repetition.Repetition;

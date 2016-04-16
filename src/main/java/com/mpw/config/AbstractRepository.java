@@ -24,7 +24,6 @@ public abstract class AbstractRepository<T> {
         return query().list(getPathBase());
     }
 
-
     protected JPAQuery query(){
         return new JPAQuery(entityManager).from(getPathBase());
     }

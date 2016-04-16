@@ -1,6 +1,5 @@
 package com.mpw.repetition;
 
-import com.mpw.card.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class RepetitionService {
     }
 
     public Repetition findCurrent(int cardId){
-        return repetitionRepository.findCurrent(cardId);
+        return repetitionRepository.findNextPlanned(cardId);
     }
 
     public List<Repetition> findAll(){
