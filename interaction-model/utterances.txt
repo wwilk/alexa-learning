@@ -1,0 +1,13 @@
+CheckAnswerIntent give me answer
+AssessmentIntent evaluate {Grade}
+HowManyWordsIntent Words planned for {Date}
+PrepareCardIntent The answer for {Do I love Java|Question} is {yes|Answer}
+PrepareCardIntent The answer for {Color of the sky|Question} is {blue|Answer}
+PrepareCardIntent The answer for {Biggest city|Question} is {Tokyo|Answer}
+PrepareCardIntent The answer for {Biggest ocean|Question} is {Pacific|Answer}
+PrepareCardIntent The answer for {Biggest planet|Question} is {Jupiter|Answer}
+ConfirmCardIntent confirm
+ConfirmCardIntent correct
+ConfirmCardIntent OK
+GoToLearningIntent Go to learning
+GoToCardsIntent Go to cards

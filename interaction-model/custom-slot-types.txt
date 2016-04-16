@@ -1,0 +1,1 @@
+LIST_OF_GRADES	bad | good | excellent

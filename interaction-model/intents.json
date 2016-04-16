@@ -1,0 +1,56 @@
+{
+  "intents": [
+    {
+      "intent": "CheckAnswerIntent"
+    },
+    {
+      "intent": "AssessmentIntent",
+      "slots":[
+        {
+          "name": "Grade",
+          "type": "LIST_OF_GRADES"
+        }
+      ]
+    },
+    {
+      "intent": "PrepareCardIntent",
+      "slots":[
+        {
+          "name": "Question",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "Answer",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "HowManyWordsIntent",
+      "slots":[
+        {
+          "name": "Date",
+          "type": "AMAZON.DATE"
+        }
+      ]
+    },
+    {
+      "intent": "GoToLearningIntent"
+    },
+    {
+      "intent": "GoToCardsIntent"
+    },
+    {
+      "intent": "ConfirmCardIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
