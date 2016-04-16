@@ -1,9 +1,6 @@
 package com.mpw.repetition;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Collections;
+import java.util.*;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -48,8 +45,10 @@ public class DefaultNextRepetitionService implements NextRepetitionService {
     	int numberOfConsideredRepetitions = (numberOfRepetitions > MAX_REPETITIONS_NUMBER) ? MAX_REPETITIONS_NUMBER : numberOfRepetitions;
     	
     	Collections.sort(repetitions, Comparator.reverseOrder());
-    	
-    	if (1 == repetitions.get(0).getUserGrade()){
+
+		Repetition lastRepetition = repetitions.get(0);
+
+    	if (Objects.equals(1, lastRepetition.getUserGrade())){
     		return 0;
     	}
     	
