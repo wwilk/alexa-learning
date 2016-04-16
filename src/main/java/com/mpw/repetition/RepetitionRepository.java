@@ -1,6 +1,6 @@
 package com.mpw.repetition;
 
-import com.mpw.config.AbstractRepository;
+import com.mpw.jpa.AbstractRepository;
 import com.mysema.query.types.path.EntityPathBase;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;

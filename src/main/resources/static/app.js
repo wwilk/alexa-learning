@@ -13,7 +13,7 @@
 
     app.controller('mainController', function($rootScope, $location, alexaFactory){
         alexaFactory.connectToAlexa();
-        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
+        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent, responseCallback){
             var method = alexaRequestEvent.method;
 
             var destination = null;
@@ -26,7 +26,7 @@
             if(destination){
                 window.location.hash = "/" + destination;
                 var response = "Switched to " + destination + " mode";
-                alexaFactory.sendResponse(response);
+                responseCallback(response);
             }
         });
     });

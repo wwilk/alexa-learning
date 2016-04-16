@@ -1,6 +1,6 @@
 package com.mpw.card;
 
-import com.mpw.config.AbstractRepository;
+import com.mpw.jpa.AbstractRepository;
 import com.mpw.repetition.QRepetition;
 import com.mpw.repetition.Repetition.RepetitionStatus;
 import com.mysema.query.jpa.JPASubQuery;

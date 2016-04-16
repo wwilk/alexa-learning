@@ -13,10 +13,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 
 @Configuration
-@PropertySources({
-    @PropertySource("classpath:default.properties"),
-    @PropertySource(value = "file:${user.home}/environment.properties", ignoreResourceNotFound = true)
-})
 public class EncodingConfig {
 
     @Bean

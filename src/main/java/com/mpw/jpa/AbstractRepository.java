@@ -1,4 +1,4 @@
-package com.mpw.config;
+package com.mpw.jpa;
 
 import com.mpw.card.Card;
 import com.mysema.query.jpa.impl.JPAQuery;

@@ -9,26 +9,27 @@
         self.answer = '';
         self.question = '';
 
-        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent){
+        $rootScope.$on('alexaRequestEvent', function(event, alexaRequestEvent, responseCallback){
             var method = alexaRequestEvent.method;
+            var parameters = method.parameters;
             if(method.name === 'PrepareCardIntent'){
-                fillForm(method.parameters.question, method.parameters.answer);
+                fillForm(parameters.question, parameters.answer, responseCallback);
             } else if(method.name === 'ConfirmCardIntent'){
-                saveAnswer();
+                saveAnswer(responseCallback);
             }
         });
 
-        function fillForm(question, answer){
+        function fillForm(question, answer, responseCallback){
             self.question = question;
             self.answer = answer;
             var response = "Please correct the inputs and say 'correct' when you are done";
-            alexaFactory.sendResponse(response);
+            responseCallback(response);
         };
 
-        function saveAnswer(){
+        function saveAnswer(responseCallback){
             cardsFactory.save({question: self.question, answer : self.answer})
                 .then(function(){
-                    alexaFactory.sendResponse('Card saved');
+                    responseCallback('Card saved');
                     self.answer = '';
                     self.question = '';
                 });
