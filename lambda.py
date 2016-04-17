@@ -9,38 +9,6 @@ NO_PARAMETERS = {}
 NO_REPROMPT = None
 DO_NOT_END_SESSION = False
 
-# Sample test event to paste in Amazon Lambda site (Configure Test Event)
-"""
-{
- "session": {
-   "sessionId": "SessionId.WHATEVER",
-   "application": {
-     "applicationId": "YOUR-APP-ID"
-   },
-   "user": {
-     "userId": "USER-ID"
-   },
-   "new": true
- },
- "request": {
-   "type": "IntentRequest",
-   "requestId": "EdwRequestId.WHATEVER",
-   "timestamp": "2016-04-09T12:44:40Z",
-   "intent": {
-     "name": "HowManyWordsIntent",
-     "slots": {
-       "Date": {
-         "name": "Date",
-         "value": "2016-04-11"
-       }
-     }
-   },
-   "locale": "en-US"
- },
- "version": "1.0"
-}
-"""
-
 def lambda_handler(event, context):
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
