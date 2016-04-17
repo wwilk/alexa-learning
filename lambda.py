@@ -4,6 +4,7 @@ import urllib2
 
 
 APP_ID = "your-app-id-as-string" #App-id taken from alexa.amazon.com
+BACKEND_URL = "your-listener-address/api/echo"
 
 NO_PARAMETERS = {}
 NO_REPROMPT = None
@@ -79,10 +80,10 @@ def send_request_to_server(name, parameters):
                           "parameters": parameters})
     print("# Payload:")
     print(payload)
-    LISTENER_URL = "your-listener-address/api/echo"
+    
     try:
         # can't use requests lib
-        req = urllib2.Request(LISTENER_URL, payload, {'Content-Type': 'application/json'})
+        req = urllib2.Request(BACKEND_URL, payload, {'Content-Type': 'application/json'})
         f = urllib2.urlopen(req, timeout=15)
         response = f.read()
         f.close()
