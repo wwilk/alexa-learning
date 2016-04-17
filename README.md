@@ -64,7 +64,9 @@ On /cards available are:
 Lambda testing
 ====
 Most convenient way to test lambda is by running test event in Lambda section of AWS. It doesn't require a physical device (such as Echo) and is very effective for small changes in lambda (e.g. new exception handling), checking configuration and server responses.
+
 Sample test event based on the one created in amazon.alexa.com used to check HowManyWordsIntent flow. 
+
 Just paste it in AWS: Code->Actions->Configure Test Event and change applicationId or delete check in lambda.
 
 ```
