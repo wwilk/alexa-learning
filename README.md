@@ -46,7 +46,9 @@ Backend build and deployment
 * mvn clean package (in project root directory)
 * send target/alexa-learning-0.0.1-SNAPSHOT.jar to your hosting (for example via scp)
 * install JRE 8 on your hosting
-* execute following command "java -jar alexa-learning-0.0.1-SNAPSHOT.jar" 
+* execute following command "java -jar alexa-learning-0.0.1-SNAPSHOT.jar"
+* insert values for variables in lambda_py - BACKEND_URL (public DNS of your hosting + port 8080) and APP_ID (taken from alexa.amazon.com)
+* deploy lambda.py as a Lambda function in AWS console
 
 Intents
 ====
@@ -69,7 +71,7 @@ Sample test event based on the one created in amazon.alexa.com used to check How
 
 Just paste it in AWS: Code->Actions->Configure Test Event and change applicationId or delete check in lambda.
 
-```
+```json
 {
  "session": {
    "sessionId": "SessionId.WHATEVER",
