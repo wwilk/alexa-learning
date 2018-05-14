@@ -5,6 +5,13 @@ import urllib2
 
 APP_ID = "your-app-id-as-string" #App-id taken from alexa.amazon.com
 BACKEND_URL = "your-listener-address/api/echo"
+AVAILABLE_INTENTS = {name + 'Intent' for name in ('CheckAnswer',
+                                                  'Assessment',
+                                                  'PrepareCard',
+                                                  'ConfirmCard',
+                                                  'GoToCards',
+                                                  'GoToLearning',
+                                                  'HowManyWords')}
 
 NO_PARAMETERS = {}
 NO_REPROMPT = None
@@ -42,16 +49,7 @@ def on_launch(launch_request, session):
 
 
 def on_intent(intent_request, session):
-    """Processes available intents which are defined in application config.
-       This is the only place in lambda which should be modified when user wants to add more intents
-       and send it to a listener in generic way."""
-    AVAILABLE_INTENTS = [name + 'Intent' for name in ['CheckAnswer',
-                                                      'Assessment',
-                                                      'PrepareCard',
-                                                      'ConfirmCard',
-                                                      'GoToCards',
-                                                      'GoToLearning',
-                                                      'HowManyWords']]
+    """Processes available intents which are defined in application config."""
 
     print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
